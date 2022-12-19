@@ -4,13 +4,14 @@ import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { CartList, OrderSummary } from '../../components/cart';
 
 const CartPage = () => {
+
 	return (
-		<ShopLayout title='Carrito - 3' pageDescription={'Carrito de compras de la tienda'}>
+		<ShopLayout title={`Sebas - Shop | Carrito `} pageDescription={'Carrito de compras de la tienda'}>
 			<Typography variant='h1' component='h1'>Carrito</Typography>
 
 			<Grid container>
 				<Grid item xs={12} sm={7}>
-					<CartList editable />
+					<CartList editable/>
 				</Grid>
 				<Grid item xs={12} sm={5}>
 					<Card className='summary-card'>
