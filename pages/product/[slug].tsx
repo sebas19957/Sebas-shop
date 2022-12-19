@@ -31,7 +31,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     slug: product.slug,
     title: product.title,
     gender: product.gender,
-    quantity: 5,
+    quantity: 1,
   });
 
   const selectedSize = (size: ISize) => {
@@ -52,6 +52,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     if (!tempCartProduct.size) { return; }
 
     addProductToCart(tempCartProduct);
+    router.push('/cart')
   }
 
   return (
@@ -89,7 +90,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
                   <Button
                     color="secondary"
                     className='circular-btn'
-                    onClick={() => console.log(tempCartProduct)}
+                    onClick={onAddProduct}
                   >
                     {
                       tempCartProduct.size

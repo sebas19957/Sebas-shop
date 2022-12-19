@@ -39,7 +39,7 @@ export const ItemCounter: FC<Props> = ({ currentValue, updatedQuantity, maxValue
         {currentValue}
       </Typography>
       <IconButton
-        disabled={currentValue === maxValue || currentValue === 5}
+        disabled={currentValue === maxValue || currentValue === 10}
         onClick={() => addOrRemove(+1)}
       >
         <AddCircleOutline />

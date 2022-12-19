@@ -5,12 +5,13 @@ import { useRouter } from 'next/router';
 import { AppBar, Badge, Box, Button, IconButton, Input, InputAdornment, Link, Toolbar, Typography } from '@mui/material';
 import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material';
 
-import { UIContext } from '../../context';
+import { CartContext, UIContext } from '../../context';
 
 export const Navbar = () => {
 
   const router = useRouter();
   const { toggleSideMenu } = useContext(UIContext);
+  const { numberOfItems } = useContext(CartContext);
 
   const [searchTerm, setSearchTerm] = useState('');
   const [isSearchVisible, setIsSearchVisible] = useState(false);
@@ -103,7 +104,7 @@ export const Navbar = () => {
         <NextLink href="/cart" passHref>
           <Link>
             <IconButton>
-              <Badge badgeContent={2} color="secondary">
+              <Badge badgeContent={numberOfItems < 9 ? numberOfItems : '+9'} color="secondary">
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>
