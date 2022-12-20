@@ -1,20 +1,41 @@
+import { useState, useContext } from 'react';
+import { useRouter } from 'next/router';
 import NextLink from 'next/link';
-import { Box, Button, Grid, Link, TextField, Typography } from '@mui/material';
+import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
+import { ErrorOutline } from '@mui/icons-material';
 import { useForm, SubmitHandler } from "react-hook-form";
 
+import { AuthContext } from '../../context';
+import { shopApi } from '../../api';
+import { validations } from '../../utils';
 import { AuthLayout } from '../../components/layouts'
+
+type FormData = {
+  email: string,
+  password: string,
+};
 
 const LoginPage = () => {
 
-  type FormData = {
-    email: string,
-    password: string,
-  };
+  const router = useRouter();
+  const { loginUser } = useContext(AuthContext)
 
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
+  const [showError, setShowError] = useState(false);
 
-  const onLoginUser = (data: FormData) => {
-    console.log({ data });
+  const onLoginUser = async ({ email, password }: FormData) => {
+
+    setShowError(false);
+    const isValidLogin = await loginUser(email, password);
+
+    if (!isValidLogin) {
+      setShowError(true);
+      setTimeout(() => { setShowError(false) }, 4000);
+      return;
+    }
+
+    // Todo: Navegar a la pantalla anterior, donde el usuario estaba
+    router.replace('/');
   }
 
   return (
@@ -24,6 +45,13 @@ const LoginPage = () => {
           <Grid container spacing={2}>
             <Grid item xs={12}>
               <Typography variant='h1' component="h1">Iniciar Sesión</Typography>
+              <Chip
+                label='Usuario o contreaseña incorrecto.'
+                color='error'
+                icon={<ErrorOutline />}
+                className='fadeIn'
+                sx={{ display: showError ? 'flex' : 'none' }}
+              />
             </Grid>
 
             <Grid item xs={12}>
@@ -34,7 +62,8 @@ const LoginPage = () => {
                 fullWidth
                 {
                 ...register('email', {
-                  required: 'Este campo es requerido'
+                  required: 'Este campo es requerido',
+                  validate: validations.isEmail
                 })}
                 error={!!errors.email}
                 helperText={errors.email?.message}
@@ -62,6 +91,7 @@ const LoginPage = () => {
                 className='circular-btn'
                 size='large'
                 fullWidth
+                disabled={showError}
               >
                 Ingresar
               </Button>
