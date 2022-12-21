@@ -3,7 +3,7 @@ import { useRouter } from 'next/router';
 import NextLink from 'next/link';
 import { Box, Button, Chip, Grid, Link, TextField, Typography } from '@mui/material';
 import { ErrorOutline } from '@mui/icons-material';
-import { useForm, SubmitHandler } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { AuthContext } from '../../context';
 import { AuthLayout } from '../../components/layouts'
@@ -24,6 +24,8 @@ const RegisterPage = () => {
   const [showError, setShowError] = useState(false);
   const [showErrorMessage, setShowErrorMessage] = useState('');
 
+  const destination = router.query.p?.toString();
+
   const onRegisterForm = async ({ name, email, password }: FormData) => {
 
     setShowError(false);
@@ -35,8 +37,7 @@ const RegisterPage = () => {
       setTimeout(() => { setShowError(false) }, 4000);
       return;
     }
-
-    router.replace('/');
+    router.replace(`${destination ?? '/'}`);
   }
 
   return (
@@ -109,7 +110,10 @@ const RegisterPage = () => {
             </Grid>
 
             <Grid item xs={12} display='flex' justifyContent='end'>
-              <NextLink href="/auth/login" passHref>
+              <NextLink
+                href={destination ? `/auth/login?p=${destination}` : '/auth/login'}
+                passHref
+              >
                 <Link underline='always'>
                   ¿Ya tienes cuenta?
                 </Link>
