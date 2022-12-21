@@ -23,6 +23,8 @@ const LoginPage = () => {
   const { register, handleSubmit, formState: { errors } } = useForm<FormData>();
   const [showError, setShowError] = useState(false);
 
+  const destination = router.query.p?.toString();
+
   const onLoginUser = async ({ email, password }: FormData) => {
 
     setShowError(false);
@@ -35,7 +37,7 @@ const LoginPage = () => {
     }
 
     // Todo: Navegar a la pantalla anterior, donde el usuario estaba
-    router.replace('/');
+    router.replace(`${destination ?? '/'}`);
   }
 
   return (
@@ -98,7 +100,10 @@ const LoginPage = () => {
             </Grid>
 
             <Grid item xs={12} display='flex' justifyContent='end'>
-              <NextLink href="/auth/register" passHref>
+              <NextLink
+                href={destination ? `/auth/register?p=${destination}` : '/auth/register'}
+                passHref
+              >
                 <Link underline='always'>
                   ¿No tienes cuenta?
                 </Link>
