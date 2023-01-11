@@ -12,7 +12,7 @@ interface Props {
 
 export const CartList: FC<Props> = ({ editable = false }) => {
 
-  const {cart, updateCartQuantity, deletedProduct} = useContext(CartContext);
+  const { cart, updateCartQuantity, deletedProduct } = useContext(CartContext);
 
   const onNewQuantityValue = (product: ICartProduct, newQuantityValue: number) => {
     product.quantity = newQuantityValue;
@@ -30,7 +30,7 @@ export const CartList: FC<Props> = ({ editable = false }) => {
           <Grid container spacing={2} key={product.slug + product.size} sx={{ mb: 1 }}>
             <Grid item xs={3}>
               {/* TODO: llevar a la página del producto */}
-              <NextLink href={`/product/${product.slug}`} passHref>
+              <NextLink href={`/product/${product.slug}`} passHref legacyBehavior>
                 <Link>
                   <CardActionArea>
                     <CardMedia
@@ -48,16 +48,16 @@ export const CartList: FC<Props> = ({ editable = false }) => {
                 <Typography variant='body1'>Talla: <strong>{product.size}</strong></Typography>
                 {
                   editable
-                    ? <ItemCounter 
-                        currentValue={product.quantity} 
-                        maxValue={product.inStock}  
-                        updatedQuantity={(value) => onNewQuantityValue(product, value)}
-                      />
+                    ? <ItemCounter
+                      currentValue={product.quantity}
+                      maxValue={product.inStock}
+                      updatedQuantity={(value) => onNewQuantityValue(product, value)}
+                    />
                     : (
                       <Typography variant='subtitle1' >
                         {product.quantity} {product.quantity > 1 ? 'productos' : 'producto'}
                       </Typography>
-                    ) 
+                    )
                 }
               </Box>
             </Grid>
@@ -65,9 +65,9 @@ export const CartList: FC<Props> = ({ editable = false }) => {
               <Typography variant='subtitle1'>{`$${product.price}`}</Typography>
               {
                 editable && (
-                  <Button 
-                    variant='text' 
-                    color='secondary' 
+                  <Button
+                    variant='text'
+                    color='secondary'
                     onClick={() => onDeleteProduct(product)}
                   >
                     Remover

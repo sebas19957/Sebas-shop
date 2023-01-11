@@ -1,28 +1,30 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
+
 import { Link, Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
 
+import { CartContext } from '../../context';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { CartList, OrderSummary } from '../../components/cart';
-import { CartContext } from '../../context/cart/CartContext';
-import { countries } from '../../utils/countries';
 
 const SummaryPage = () => {
 
-  const { numberOfItems, shippingAddress } = useContext(CartContext);
+  const router = useRouter();
+  const { shippingAddress, numberOfItems } = useContext(CartContext);
 
-  if (!shippingAddress) return (<></>)
+  useEffect(() => {
+    if (!Cookies.get('firstName')) {
+      router.push('/checkout/address');
+    }
+  }, [router]);
 
-  const {
-    firstName,
-    lastName,
-    address,
-    address2,
-    city,
-    country,
-    phone,
-    zip
-  } = shippingAddress!;
+  if (!shippingAddress) {
+    return <></>;
+  }
+
+  const { firstName, lastName, address, address2 = '', city, country, phone, zip } = shippingAddress;
 
   return (
     <ShopLayout title='Resumen de orden' pageDescription={'Resumen de la orden'}>
@@ -35,14 +37,12 @@ const SummaryPage = () => {
         <Grid item xs={12} sm={5}>
           <Card className='summary-card'>
             <CardContent>
-              <Typography variant='h2'>
-                Resumen ({numberOfItems} {numberOfItems > 1 ? 'prosuctos' : 'producto'})
-              </Typography>
+              <Typography variant='h2'>Resumen ({numberOfItems} {numberOfItems === 1 ? 'producto' : 'productos'})</Typography>
               <Divider sx={{ my: 1 }} />
 
               <Box display='flex' justifyContent='space-between'>
                 <Typography variant='subtitle1'>Dirección de entrega</Typography>
-                <NextLink href='/checkout/address' passHref>
+                <NextLink href='/checkout/address' passHref legacyBehavior>
                   <Link underline='always'>
                     Editar
                   </Link>
@@ -51,15 +51,15 @@ const SummaryPage = () => {
 
 
               <Typography>{firstName} {lastName}</Typography>
-              <Typography>{address}{address2 ? `, ${address2}` : ''}</Typography>
+              <Typography>{address}{address2 ? `, ${address2}` : ''} </Typography>
               <Typography>{city}, {zip}</Typography>
-              <Typography>{countries.find(c => c.code === country)?.name}</Typography>
+              <Typography>{country}</Typography>
               <Typography>{phone}</Typography>
 
               <Divider sx={{ my: 1 }} />
 
               <Box display='flex' justifyContent='end'>
-                <NextLink href='/cart' passHref>
+                <NextLink href='/cart' passHref legacyBehavior>
                   <Link underline='always'>
                     Editar
                   </Link>
@@ -78,7 +78,6 @@ const SummaryPage = () => {
           </Card>
         </Grid>
       </Grid>
-
 
     </ShopLayout>
   )
