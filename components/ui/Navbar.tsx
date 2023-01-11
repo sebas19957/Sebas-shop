@@ -9,7 +9,7 @@ import { CartContext, UIContext } from '../../context';
 
 export const Navbar = () => {
 
-  const router = useRouter();
+  const { asPath, push } = useRouter();
   const { toggleSideMenu } = useContext(UIContext);
   const { numberOfItems } = useContext(CartContext);
 
@@ -18,13 +18,13 @@ export const Navbar = () => {
 
   const onSearchTerm = () => {
     if (searchTerm.trim().length === 0) return;
-    router.push(`/search/${searchTerm}`);
+    push(`/search/${searchTerm}`);
   }
 
   return (
     <AppBar>
       <Toolbar>
-        <NextLink href='/' passHref>
+        <NextLink href='/' passHref legacyBehavior>
           <Link display='flex' alignItems='center'>
             <Typography variant='h6'>Sebas |</Typography>
             <Typography sx={{ ml: 0.5 }}>Shop</Typography>
@@ -37,19 +37,19 @@ export const Navbar = () => {
           sx={{ display: isSearchVisible ? 'none' : { xs: 'none', sm: 'block' } }}
           className='fadeIn'
         >
-          <NextLink href='/category/men' passHref>
+          <NextLink href='/category/men' passHref legacyBehavior>
             <Link>
-              <Button color={router.asPath === '/category/men' ? 'primary' : 'info'}>Hombres</Button>
+              <Button color={asPath === '/category/men' ? 'primary' : 'info'}>Hombres</Button>
             </Link>
           </NextLink>
-          <NextLink href='/category/women' passHref>
+          <NextLink href='/category/women' passHref legacyBehavior>
             <Link>
-              <Button color={router.asPath === '/category/women' ? 'primary' : 'info'}>Mujeres</Button>
+              <Button color={asPath === '/category/women' ? 'primary' : 'info'}>Mujeres</Button>
             </Link>
           </NextLink>
-          <NextLink href='/category/kid' passHref>
+          <NextLink href='/category/kid' passHref legacyBehavior>
             <Link>
-              <Button color={router.asPath === '/category/kid' ? 'primary' : 'info'}>Niños</Button>
+              <Button color={asPath === '/category/kid' ? 'primary' : 'info'}>Niños</Button>
             </Link>
           </NextLink>
         </Box>
@@ -101,7 +101,7 @@ export const Navbar = () => {
           <SearchOutlined />
         </IconButton>
 
-        <NextLink href="/cart" passHref>
+        <NextLink href="/cart" passHref legacyBehavior>
           <Link>
             <IconButton>
               <Badge badgeContent={numberOfItems < 9 ? numberOfItems : '+9'} color="secondary">
