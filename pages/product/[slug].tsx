@@ -24,7 +24,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
 
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
     _id: product._id,
-    images: product.images[0],
+    image: product.images[0],
     inStock: product.inStock,
     price: product.price,
     size: undefined,
@@ -91,6 +91,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
                     color="secondary"
                     className='circular-btn'
                     onClick={onAddProduct}
+                    disabled={!tempCartProduct.size}
                   >
                     {
                       tempCartProduct.size

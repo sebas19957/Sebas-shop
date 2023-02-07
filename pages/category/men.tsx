@@ -8,7 +8,7 @@ import { useProducts } from '../../hooks'
 
 const MenPage = () => {
 
-  const { products, isLoading, error } = useProducts('/products?gender=men');
+  const { products, isLoading } = useProducts('/products?gender=men');
 
   return (
     <ShopLayout title={'Sebas-Shop - Men'} pageDescription={'Aquí encuentras todos los productos para hombres'}>

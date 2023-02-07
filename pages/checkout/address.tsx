@@ -52,7 +52,6 @@ const AddressPage = () => {
 
   useEffect(() => {
     reset(getAddressFromCookies());
-
   }, [reset])
 
   const onSubmitAddress = (data: FormData) => {

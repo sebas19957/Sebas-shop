@@ -21,7 +21,6 @@ const CartPage = () => {
 		return (<></>);
 	}
 
-
 	return (
 		<ShopLayout title={`Sebas - Shop | Carrito `} pageDescription={'Carrito de compras de la tienda'}>
 			<Typography variant='h1' component='h1'>Carrito</Typography>

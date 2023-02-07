@@ -9,7 +9,7 @@ import { FullScreenLoading } from '../components/ui';
 
 const HomePage: NextPage = () => {
 
-  const { products, isLoading, error } = useProducts('/products')
+  const { products, isLoading } = useProducts('/products')
 
   return (
     <ShopLayout title={'Sebas-Shop - Home'} pageDescription={'Encuentra los mejores productos de Sebas-shop aquí'}>

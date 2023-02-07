@@ -8,7 +8,7 @@ import { useProducts } from '../../hooks';
 
 const KidPage = () => {
 
-  const { products, isLoading, error } = useProducts('/products?gender=kid');
+  const { products, isLoading } = useProducts('/products?gender=kid');
 
   return (
     <ShopLayout title={'Sebas-Shop - Kid'} pageDescription={'Aquí encuentras todos los productos para niños'}>
