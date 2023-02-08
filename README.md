@@ -30,3 +30,9 @@ yarn dev
 ```
 http://localhost:3000/api/seed
 ```
+
+### Despliegue:
+
+1. Crear el build de producción el comando `yarn build`, verificar que no tenga errores.
+
+2. Correr el proyecto en producción con el comando `yarn start`.
