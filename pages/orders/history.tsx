@@ -69,6 +69,8 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
     orderId: order._id!
   }))
 
+  rows.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+
   return (
     <ShopLayout title={'Historial de ordenes'} pageDescription={'Historial de ordenes del cliente'}>
       <Typography variant='h1' component='h1' sx={{ mb: 1 }}>Historial de ordenes</Typography>
