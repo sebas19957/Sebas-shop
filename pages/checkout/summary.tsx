@@ -1,12 +1,48 @@
+import { useContext, useEffect, useState } from 'react';
 import NextLink from 'next/link';
+import { useRouter } from 'next/router';
+import Cookies from 'js-cookie';
 
-import { Link, Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material';
+import { Link, Box, Button, Card, CardContent, Divider, Grid, Typography, Chip } from '@mui/material';
 
+import { CartContext } from '../../context';
 import { ShopLayout } from '../../components/layouts/ShopLayout';
 import { CartList, OrderSummary } from '../../components/cart';
 
-
 const SummaryPage = () => {
+
+  const router = useRouter();
+  const { shippingAddress, numberOfItems, createOrder } = useContext(CartContext);
+
+  const [isPosting, setIsPosting] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
+
+  useEffect(() => {
+    if (!Cookies.get('firstName')) {
+      router.push('/checkout/address');
+    }
+  }, [router]);
+
+  const onCreateOrder = async () => {
+    setIsPosting(true);
+
+    const { hasError, message } = await createOrder();
+
+    if (hasError) {
+      setIsPosting(false);
+      setErrorMessage(message);
+      return;
+    }
+
+    router.replace(`/orders/${message}`)
+  }
+
+  if (!shippingAddress) {
+    return <></>;
+  }
+
+  const { firstName, lastName, address, address2 = '', city, country, phone, zip } = shippingAddress;
+
   return (
     <ShopLayout title='Resumen de orden' pageDescription={'Resumen de la orden'}>
       <Typography variant='h1' component='h1'>Resumen de la orden</Typography>
@@ -18,12 +54,12 @@ const SummaryPage = () => {
         <Grid item xs={12} sm={5}>
           <Card className='summary-card'>
             <CardContent>
-              <Typography variant='h2'>Resumen (3 productos)</Typography>
+              <Typography variant='h2'>Resumen ({numberOfItems} {numberOfItems === 1 ? 'producto' : 'productos'})</Typography>
               <Divider sx={{ my: 1 }} />
 
               <Box display='flex' justifyContent='space-between'>
                 <Typography variant='subtitle1'>Dirección de entrega</Typography>
-                <NextLink href='/checkout/address' passHref>
+                <NextLink href='/checkout/address' passHref legacyBehavior>
                   <Link underline='always'>
                     Editar
                   </Link>
@@ -31,16 +67,16 @@ const SummaryPage = () => {
               </Box>
 
 
-              <Typography>Fernando Herrera</Typography>
-              <Typography>323 Algun lugar</Typography>
-              <Typography>Stittsville, HYA 23S</Typography>
-              <Typography>Canadá</Typography>
-              <Typography>+1 23123123</Typography>
+              <Typography>{firstName} {lastName}</Typography>
+              <Typography>{address}{address2 ? `, ${address2}` : ''} </Typography>
+              <Typography>{city}, {zip}</Typography>
+              <Typography>{country}</Typography>
+              <Typography>{phone}</Typography>
 
               <Divider sx={{ my: 1 }} />
 
               <Box display='flex' justifyContent='end'>
-                <NextLink href='/cart' passHref>
+                <NextLink href='/cart' passHref legacyBehavior>
                   <Link underline='always'>
                     Editar
                   </Link>
@@ -49,17 +85,29 @@ const SummaryPage = () => {
 
               <OrderSummary />
 
-              <Box sx={{ mt: 3 }}>
-                <Button color="secondary" className='circular-btn' fullWidth>
+              <Box sx={{ mt: 3 }} display="flex" flexDirection="column">
+                <Button
+                  color="secondary"
+                  className='circular-btn'
+                  fullWidth
+                  onClick={onCreateOrder}
+                  disabled={isPosting}
+                >
                   Confirmar Orden
                 </Button>
+
+                <Chip
+                  color='error'
+                  label={errorMessage}
+                  variant='outlined'
+                  sx={{ display: errorMessage ? 'flex' : 'none', mt: 2 }}
+                />
               </Box>
 
             </CardContent>
           </Card>
         </Grid>
       </Grid>
-
 
     </ShopLayout>
   )
