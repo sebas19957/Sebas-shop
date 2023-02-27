@@ -15,13 +15,13 @@ interface Props {
 const OrderPage: NextPage<Props> = ({ order }) => {
 
   const { shippingAddress } = order;
-  
+
   return (
-    <AdminLayout 
-      title='Resumen de la orden' 
-      subTitle={`OrdenId: ${order._id}`} 
-      icon={<ConfirmationNumberOutlined/>} 
-    >  
+    <AdminLayout
+      title='Resumen de la orden'
+      subTitle={`OrdenId: ${order._id}`}
+      icon={<ConfirmationNumberOutlined />}
+    >
       {
         order.isPaid ? (
           <Chip
@@ -75,7 +75,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                 taxOrder={order.tax}
               />
 
-              <Box display='flex' flexDirection='column'>     
+              <Box display='flex' flexDirection='column'>
                 {
                   order.isPaid ? (
                     <Chip
@@ -94,7 +94,7 @@ const OrderPage: NextPage<Props> = ({ order }) => {
                       icon={<CreditCardOffOutlined />}
                     />
                   )
-                }    
+                }
               </Box>
 
             </CardContent>
