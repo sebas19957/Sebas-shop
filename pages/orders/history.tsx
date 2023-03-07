@@ -10,19 +10,20 @@ import { ShopLayout } from '../../components/layouts';
 import { dbOrders } from '../../database';
 import { IOrder } from '../../interfaces';
 import { currency } from '../../utils';
+import NotFoundOverlay from '../../components/ui/DataGrid/DataNotFound';
 
 const columns: GridColDef[] = [
-  { field: 'id', headerName: 'ID', headerAlign: 'center', align: 'center', width: 100 },
   { field: 'date', headerName: 'Fecha', headerAlign: 'center', align: 'center', width: 200 },
-  { field: 'fullname', headerName: 'Nombre Completo', headerAlign: 'center', align: 'center', width: 300 },
-  { field: 'numberOfItems', headerName: 'Nro. Productos', headerAlign: 'center', align: 'center', width: 150 },
+  { field: 'fullname', headerName: 'Nombre Completo', headerAlign: 'center', align: 'center', width: 250 },
+  { field: 'numberOfItems', headerName: 'Nro. Productos', headerAlign: 'center', align: 'center', width: 120 },
+  { field: 'address', headerName: 'Dirección', headerAlign: 'center', align: 'center', width: 300 },
   {
     field: 'paid',
     headerName: 'Estado',
     description: 'Muestra información si está pagada la orden o no',
     headerAlign: 'center',
     align: 'center',
-    width: 200,
+    width: 120,
     renderCell: params => {
       return (
         params.row.paid
@@ -63,6 +64,7 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
       "DD/MM/YYYY HH:mm:ss"
     ),
     numberOfItems: order.numberOfItems,
+    address: `${order.shippingAddress.address} - ${order.shippingAddress.city}`,
     total: currency.format(order.total),
     paid: order.isPaid,
     fullname: `${order.shippingAddress.firstName} ${order.shippingAddress.lastName}`,
@@ -74,12 +76,16 @@ const HistoryPage: NextPage<Props> = ({ orders }) => {
       <Typography variant='h1' component='h1' sx={{ mb: 1 }}>Historial de ordenes</Typography>
 
       <Grid container className='fadeIn'>
-        <Grid item xs={12} sx={{ height: 650, width: '100%' }}>
+        <Grid item xs={12} sx={{ height: rows.length !== 0 ? 'auto' : { xs: 400, sm: 510 }, width: '100%' }}>
           <DataGrid
             rows={rows}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}
+            autoHeight={rows.length !== 0 ? true : false}
+            components={{
+              NoRowsOverlay: NotFoundOverlay
+            }}
             sx={{
               "& .MuiDataGrid-cell:focus-within": {
                 outline: 'transparent !important'

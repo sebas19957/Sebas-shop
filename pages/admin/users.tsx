@@ -8,6 +8,7 @@ import { PeopleOutline } from '@mui/icons-material';
 import { AdminLayout } from '../../components/layouts';
 import { IUser } from '../../interfaces';
 import shopApi from '../../api/shopApi';
+import NotFoundOverlay from '../../components/ui/DataGrid/DataNotFound';
 
 const UsersPage = () => {
 
@@ -91,12 +92,16 @@ const UsersPage = () => {
     >
 
       <Grid container className='fadeIn'>
-        <Grid item xs={12} sx={{ height: 650, width: '100%' }}>
+        <Grid item xs={12} sx={{ height: rows.length !== 0 ? 'auto' : { xs: 400, sm: 510 }, width: '100%' }}>
           <DataGrid
             rows={rows}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}
+            autoHeight={rows.length !== 0 ? true : false}
+            components={{
+              NoRowsOverlay: NotFoundOverlay
+            }}
             sx={{
               "& .MuiDataGrid-cell:focus-within": {
                 outline: 'transparent !important'

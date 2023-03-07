@@ -1,11 +1,12 @@
 import NextLink from 'next/link';
 import useSWR from 'swr';
-import { Box, Button, CardMedia, Grid, Link } from '@mui/material';
+import { Box, Button, CardMedia, Grid, Link, Typography } from '@mui/material';
 import { AddOutlined, CategoryOutlined } from '@mui/icons-material';
 import { DataGrid, GridColDef } from '@mui/x-data-grid';
 
 import { IProduct } from '../../../interfaces';
 import { AdminLayout } from '../../../components/layouts';
+import NotFoundOverlay from '../../../components/ui/DataGrid/DataNotFound';
 
 
 const columns: GridColDef[] = [
@@ -45,6 +46,7 @@ const columns: GridColDef[] = [
     align: 'center',
     width: 130,
     sortable: false,
+    disableColumnMenu: true,
     renderCell: params => {
       return (
         <NextLink href={`/admin/products/${params.row.slug}`}
@@ -99,12 +101,16 @@ const ProductsPage = () => {
       </Box>
 
       <Grid container className='fadeIn'>
-        <Grid item xs={12} sx={{ height: 650, width: '100%' }}>
+        <Grid item xs={12} sx={{ height: rows.length !== 0 ? 'auto' : { xs: 400, sm: 510 }, width: '100%' }}>
           <DataGrid
             rows={rows}
             columns={columns}
             pageSize={10}
             rowsPerPageOptions={[10]}
+            autoHeight={rows.length !== 0 ? true : false}
+            components={{
+              NoRowsOverlay: NotFoundOverlay
+            }}
             sx={{
               "& .MuiDataGrid-cell:focus-within": {
                 outline: 'transparent !important'
